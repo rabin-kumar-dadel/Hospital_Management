@@ -113,15 +113,21 @@
 
 
                 {% if appoinment.patient.is_patient and appoinment.patient.patientprofile %}
+                {% if appoinment.is_approved %}
                 <a class="btn btn-info btn-sm"
                   href="{% url 'view_patient_profile' appoinment.patient.patientprofile.pk %}">View Patient</a>
                 {% else %}
+                <span class="text-muted"> Approval required</span>
+                {% endif %}
+                {% else %}
                 <span class="text-muted">No Profile</span>
                 {% endif %}
-
+                {% if appoinment.is_approved %}
                 <a class="btn btn-info btn-sm"
                   href="{% url 'add_report' appoinment.pk %}">Give Report</a>
-
+                  {% else %}
+                  <span class="text-muted">Approval Required for report </span>
+                  {% endif %}
               </td>
               <td>
               </td> 

@@ -19,8 +19,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-
-
+from django.contrib import messages
 
 
 def home(request):
@@ -129,7 +128,11 @@ class ReportView(LoginRequiredMixin, CreateView):
         print(self.appointment.patient)
         if self.appointment.doctor != self.request.user:
             return self.handle_no_permission()
-
+        
+        if not self.appointment.is_approved:
+            messages.error(request, 'Appoinment must be added before adding report')
+            return redirect('doctor_dash')
+ 
         return super().dispatch(request, *args, **kwargs)
     
     def form_valid(self, form):
@@ -152,3 +155,4 @@ class ReportView(LoginRequiredMixin, CreateView):
 
 
     
+
